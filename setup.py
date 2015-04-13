@@ -15,14 +15,14 @@ setup(
     author='Chris Speck',
     author_email='cgspeck@gmail.com',
     url='http://www.chrisspeck.com/',
-    packages=['qr'],
+    packages=['qualityreducer'],
     entry_points={
         'console_scripts': [
-            'qr = qualityreducer.utilrunner:main'
+            'qualityreducer = qualityreducer.utilrunner:main'
         ]
     },
     install_requires=required,
     extras_require={
-    'tests': required_test
+        'tests': required_test
     }
 )

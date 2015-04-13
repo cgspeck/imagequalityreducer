@@ -1,8 +1,5 @@
 import argparse
 import os
-import tempfile
-import shutil
-import atexit
 import sys
 
 from qualityreducer import QualityReducer
@@ -21,7 +18,7 @@ class ReadableDir(argparse.Action):
         super(ReadableDir, self).__init__(option_strings, dest, **kwargs)
 
     def __call__(self, parser, namespace, values, option_string=None):
-        prospective_dir=values
+        prospective_dir = values
         if not os.path.isdir(prospective_dir):
             raise argparse.ArgumentTypeError("readable_dir:{0} is not a valid path".format(prospective_dir))
         if os.access(prospective_dir, os.R_OK):
@@ -60,7 +57,7 @@ def main():
 
         if args.overwrite:
             print('Saving over original')
-            #qr.save(f_name)
+            qr.save(f_name)
         else:
             new_file_name = '{pre}_reduced.{extension}'.format(
                 pre=''.join(f_name.split('.')[:1]), extension=''.join(f_name.split('.')[1:]))

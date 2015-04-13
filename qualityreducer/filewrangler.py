@@ -20,7 +20,7 @@ class FileWrangler(object):
 
         print('{count} files found'.format(count=len(full_file_list)))
 
-        for f_name in  full_file_list:
+        for f_name in full_file_list:
             if os.path.getsize(f_name) > self.max_size_bytes:
                 large_file_list.append(f_name)
 
