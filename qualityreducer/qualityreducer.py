@@ -1,5 +1,6 @@
 from io import BytesIO
 from os import path
+
 from PIL import Image
 
 class QualityReducer(object):
@@ -15,13 +16,13 @@ class QualityReducer(object):
             'min_val': 1,
             'max_val': 100,
             'meta': 'quality',
-            'smallest': 100
+            'smallest': 1
         }
     }
 
-    def __init__(self, kwargs=None):
+    def __init__(self, max_size_bytes):
         super(QualityReducer, self).__init__()
-        self.target_size = getattr(kwargs, 'target_size', 250000)
+        self.target_size = max_size_bytes
         # name of last file we ran over
         self.last_run = None
         # set by the load method
@@ -65,16 +66,26 @@ class QualityReducer(object):
             data, size = self._simulate_save(x)
 
             if size < self.target_size:
-                # go up half a block
-                if upper_limit > x:
-                    lower_limit = x
-                    new_x = int((upper_limit - x) / 2) + x
+                if quality_spec['smallest'] == quality_spec['max_val']:
+                    if lower_limit < x:
+                        upper_limit = x
+                        new_x = int((x - lower_limit) / 2) + lower_limit
+                else:
+                    # go up half a block
+                    if upper_limit > x:
+                        lower_limit = x
+                        new_x = int((upper_limit - x) / 2) + x
 
             if size > self.target_size:
-                # go down half a block
-                if lower_limit < x:
-                    upper_limit = x
-                    new_x = int((x - lower_limit) / 2) + lower_limit
+                if quality_spec['smallest'] == quality_spec['max_val']:
+                    if upper_limit > x:
+                        lower_limit = x
+                        new_x = int((upper_limit - x) / 2) + x
+                else:
+                    # go down half a block
+                    if lower_limit < x:
+                        upper_limit = x
+                        new_x = int((x - lower_limit) / 2) + lower_limit
 
             if new_x != x:
                 # there's more compressing to do!
@@ -128,9 +139,9 @@ class QualityReducer(object):
         print('Simulated save level %s size %s bytes' % (quality, output.getbuffer().nbytes))
         return output, output.getbuffer().nbytes
 
-    def save_optimum_quality(self, filename=None):
+    def save(self, filename=None):
         """
-        Overwrites original filename with compressed version
+        Saves compressed version
         """
         if not filename:
             raise
