@@ -11,7 +11,7 @@ setup(
     description='''
     Reduce images to desired file size
     ''',
-    version='0.9.0',
+    version='0.9.1',
     author='Chris Speck',
     author_email='cgspeck@gmail.com',
     url='http://www.chrisspeck.com/',

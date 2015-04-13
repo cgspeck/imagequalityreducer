@@ -2,8 +2,8 @@ import argparse
 import os
 import sys
 
-from qualityreducer import QualityReducer
-from filewrangler import FileWrangler
+from .qualityreducer import QualityReducer
+from .filewrangler import FileWrangler
 
 class UtilRunner(object):
     """Scan specified folder or file and run quality reducer against it"""
